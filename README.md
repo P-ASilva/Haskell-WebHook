@@ -1,7 +1,6 @@
 # Haskell Webhook
 
-Este projeto é um servidor web em Haskell que recebe notificações de webhook, valida payloads JSON, verifica duplicidade de transações e confirma ou cancela pagamentos via requisições HTTP para os endpoints configurados.
-
+Este projeto é um Webhook em Haskell que recebe notificações de transações, valida payloads JSON, verifica duplicidade de transações e confirma ou cancela pagamentos via requisições HTTP de forma assincrona para os endpoints configurados.
 
 ## Pré-requisitos
 
@@ -65,7 +64,7 @@ Exemplos adicionais no arquivo `test_webhook.py`.
 
 ## Estrutura do projeto
 
-* `Validator.hs`: Validação e controle de transações duplicadas - Atualmente em memória
+* `Validator.hs`: Validação e controle de transações duplicadas - **Atualmente em memória**
 * `Confirmator.hs`: Envio das confirmações ou cancelamentos para url configurada
 * `Webhook.hs`: Servidor web e lógica do endpoint webhook
 * `Main.hs`: Roda o servidor. No futuro, deve também chamar a validação do banco de dados/inicialização.
