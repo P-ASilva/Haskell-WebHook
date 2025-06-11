@@ -8,7 +8,7 @@ import Network.HTTP.Types.Status
 import Network.HTTP.Types.Header
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text.Lazy as TL
-import Validator (validatePayload, validateToken)
+import Validator (validatePayload, validateToken, validatePayloadWithDupCheck)
 import Confirmator (confirmarTransacao, cancelarTransacao)
 import Control.Monad.IO.Class (liftIO)
 
@@ -28,13 +28,13 @@ handleWebhook = do
           text "Unauthorized"
   where
     process payload = do
-      result <- liftIO $ validatePayload payload
+      result <- liftIO $ validatePayloadWithDupCheck payload
       case result of
-        Right _ -> do
-          _ <- liftIO $ confirmarTransacao payload
+        Right p -> do
+          liftIO $ confirmarTransacao payload
           status ok200
           text "Confirmed"
-        Left _ -> do
-          _ <- liftIO $ cancelarTransacao payload
+        Left err -> do
+          liftIO $ cancelarTransacao payload
           status badRequest400
-          text "Cancelled"
+          text (TL.pack err)
